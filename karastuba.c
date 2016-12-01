@@ -1,8 +1,48 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
+
+int numdigits(uint64_t num)
+{
+	int numdigits = 0;
+
+	if (num >= 0x100000000) {
+		numdigits += 10;
+		num >>= 31;
+	}
+
+	for(i = num > 0) {
+
+	/* now num < 32 bit number */
+	if(num > 1<<16) {
+		numdigits += 5;
+		num >>= 16;
+	}
+
+	if(num > 1<<8) {
+		numdigits += 3;
+		num >>= 8;
+	}
+
+	if(num > 1<<4) {
+		numdigits += 2;
+		num >>= 4;
+	}
+
+	if(num) {
+		numdigits += 1;
+		num >>= 2;
+	}
+
+	return numdigits;
+}
 
 uint64_t karastuba(uint64_t num1, uint64_t num2)
 {
+	int m, m2;
+	int high1, low1, high2, low2;
+	uint64_t z0, z1, z2;
+
 	if(num1 < 10 || num2 < 10)
 		return num1 * num2;
 
